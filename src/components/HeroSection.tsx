@@ -175,7 +175,7 @@ export function HeroSection({ cardRef, textRef, onWaitlist }: Props) {
 
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText('hello@trollii.app')
+      await navigator.clipboard.writeText('support.trollii@gmail.com')
       setEmailCopied(true)
       setTimeout(() => setEmailCopied(false), 2000)
     } catch { /* clipboard unavailable */ }
@@ -214,8 +214,8 @@ export function HeroSection({ cardRef, textRef, onWaitlist }: Props) {
             Join the waitlist →
           </button>
 
-          <button onClick={copyEmail} className="inline-flex items-center justify-center gap-2 sm:gap-3 text-fore bg-white/90 border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200" aria-label="Copy email hello@trollii.app">
-            {emailCopied ? <span>✓ Copied!</span> : <><span>Say hi: <span className="underline underline-offset-1">hello@trollii.app</span></span><CopyIcon /></>}
+          <button onClick={copyEmail} className="inline-flex items-center justify-center gap-2 sm:gap-3 text-fore bg-white/90 border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200" aria-label="Copy email support.trollii@gmail.com">
+            {emailCopied ? <span>✓ Copied!</span> : <><span>Say hi: <span className="underline underline-offset-1">support.trollii@gmail.com</span></span><CopyIcon /></>}
           </button>
         </div>
       </div>
