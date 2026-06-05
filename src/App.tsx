@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { HeroCanvas } from './components/HeroCanvas'
 import { Navbar } from './components/Navbar'
 import { HeroSection } from './components/HeroSection'
@@ -29,6 +30,7 @@ export default function App() {
       <WaitlistSection onWaitlist={openWaitlist} />
       <Footer />
       <WaitlistModal open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
+      <Analytics />
     </div>
   )
 }
