@@ -35,7 +35,7 @@ const PLANS = [
       'Community challenges',
       'Weekly insights report',
     ],
-    cta: 'Start 14-day free trial',
+    cta: 'Join waitlist — Pro early access',
     ctaStyle: 'filled',
     popular: true,
   },
@@ -220,7 +220,7 @@ export function PlansSection({ onSignUp }: Props) {
 
         {/* Fine print */}
         <p className="text-center text-[13px] text-slate-400 mt-10">
-          All plans include a 14-day free trial. No credit card required to start. Cancel any time, no questions asked.
+          No credit card required to join the waitlist. Cancel any time, no questions asked.
         </p>
       </div>
     </section>

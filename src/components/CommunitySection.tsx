@@ -2,10 +2,10 @@ import { useScrollReveal } from '../hooks/useScrollReveal'
 import { useCountUp } from '../hooks/useCountUp'
 
 const STATS = [
-  { display: '10,000+', countTo: 10000, suffix: '+', label: 'Active members', color: '#059669' },
-  { display: '2.4M',    countTo: 2400,  suffix: 'K', label: 'Meals logged',   color: '#3B82F6' },
-  { display: '4.9 ★',  countTo: 49,    suffix: ' ★', label: 'App Store rating', color: '#F59E0B', decimal: true },
-  { display: '14 days', countTo: 14,    suffix: ' days', label: 'Avg. streak', color: '#EC4899' },
+  { display: '2,400+', countTo: 2400, suffix: '+', label: 'Waitlist members', color: '#059669' },
+  { display: '14M+',   countTo: 14,   suffix: 'M+', label: 'Foods in database', color: '#3B82F6' },
+  { display: '4.8 ★', countTo: 48,   suffix: ' ★', label: 'Beta rating', color: '#F59E0B', decimal: true },
+  { display: '9 days', countTo: 9,    suffix: ' days', label: 'Avg. beta streak', color: '#EC4899' },
 ]
 
 const TESTIMONIALS = [
@@ -39,9 +39,9 @@ const TESTIMONIALS = [
 ]
 
 const CHALLENGES = [
-  { emoji: '💪', title: 'Protein Week', participants: 847, label: 'Coming soon' },
-  { emoji: '🥗', title: 'Clean Eating Sprint', participants: 1203, label: 'Coming soon' },
-  { emoji: '💧', title: 'Hydration Challenge', participants: 562, label: 'Coming soon' },
+  { emoji: '💪', title: 'Protein Week', participants: 38, label: 'Coming soon' },
+  { emoji: '🥗', title: 'Clean Eating Sprint', participants: 61, label: 'Coming soon' },
+  { emoji: '💧', title: 'Hydration Challenge', participants: 24, label: 'Coming soon' },
 ]
 
 function StatCard({ countTo, suffix, label, color, decimal, active }: {

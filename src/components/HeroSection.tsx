@@ -14,7 +14,7 @@ const WHITE_PILLS = [
   'Track my macros',
   'Scan a food label',
   'Build a meal plan',
-  'Join 10k+ members',
+  'Join the waitlist',
 ] as const
 
 const MACROS = [
