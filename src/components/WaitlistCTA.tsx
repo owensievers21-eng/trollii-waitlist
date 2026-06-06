@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase'
 const SOCIAL_PROOF = [
   { icon: '🔥', text: '147 people joined this week' },
   { icon: '⚡', text: 'Launching Q3 2026' },
-  { icon: '🎁', text: '3 months Pro free for early members' },
+  { icon: '🎁', text: 'Exclusive early access perks' },
 ]
 
 export function WaitlistCTA() {
@@ -56,7 +56,7 @@ export function WaitlistCTA() {
           </h2>
 
           <p className="text-[17px] text-slate-500 mb-8 leading-relaxed">
-            Early access members get <strong className="text-fore font-semibold">3 months of Pro free</strong> at launch. No credit card. No commitment.
+            Join early and be the first to experience smarter nutrition tracking. No credit card. No commitment.
           </p>
 
           {status === 'done' ? (
