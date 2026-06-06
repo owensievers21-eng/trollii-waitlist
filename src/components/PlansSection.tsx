@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const PLANS = [
   {
@@ -71,6 +72,8 @@ interface Props { onWaitlist: () => void }
 
 export function PlansSection({ onWaitlist }: Props) {
   const [annual, setAnnual] = useState(false)
+  const [headerRef, headerVisible] = useScrollReveal<HTMLDivElement>()
+  const [cardsRef, cardsVisible] = useScrollReveal<HTMLDivElement>()
 
   return (
     <section id="plans" className="relative bg-surface" style={{ zIndex: 2 }}>
@@ -82,7 +85,7 @@ export function PlansSection({ onWaitlist }: Props) {
 
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pb-24">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div ref={headerRef} className={`text-center mb-12 reveal${headerVisible ? ' visible' : ''}`}>
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3.5 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             <span className="text-[13px] text-primary font-medium">Pricing</span>
@@ -103,9 +106,9 @@ export function PlansSection({ onWaitlist }: Props) {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          {PLANS.map((plan) => (
-            <div key={plan.name} className="rounded-2xl border p-7 relative" style={{ background: plan.popular ? plan.color : '#FFFFFF', borderColor: plan.popular ? plan.color : '#E2E8F0', boxShadow: plan.popular ? `0 8px 40px ${plan.color}30` : undefined, transform: plan.popular ? 'scale(1.02)' : undefined }}>
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          {PLANS.map((plan, i) => (
+            <div key={plan.name} className={`rounded-2xl border p-7 relative reveal stagger-${i + 1}${cardsVisible ? ' visible' : ''}`} style={{ background: plan.popular ? plan.color : '#FFFFFF', borderColor: plan.popular ? plan.color : '#E2E8F0', boxShadow: plan.popular ? `0 8px 40px ${plan.color}30` : undefined, transform: plan.popular ? 'scale(1.02)' : undefined }}>
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                   <span className="bg-amber-400 text-amber-900 text-[11px] font-bold px-3.5 py-1 rounded-full uppercase tracking-wide whitespace-nowrap">Most popular</span>

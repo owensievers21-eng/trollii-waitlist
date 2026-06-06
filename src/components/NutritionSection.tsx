@@ -40,11 +40,16 @@ function MacroDonut() {
   )
 }
 
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
 interface Props { onWaitlist: () => void }
 
 export function NutritionSection({ onWaitlist }: Props) {
+  const [sectionRef, sectionVisible] = useScrollReveal<HTMLElement>()
+  const [stepsRef, stepsVisible] = useScrollReveal<HTMLDivElement>()
+
   return (
-    <section id="nutrition" className="relative bg-surface" style={{ zIndex: 2 }}>
+    <section ref={sectionRef} id="nutrition" className="relative bg-surface" style={{ zIndex: 2 }}>
       <div className="w-full overflow-hidden leading-none" aria-hidden="true">
         <svg viewBox="0 0 1440 64" fill="none" className="w-full">
           <path d="M0 0 C360 64 1080 64 1440 0 L1440 64 L0 64 Z" fill="white" />
@@ -52,7 +57,7 @@ export function NutritionSection({ onWaitlist }: Props) {
       </div>
 
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pb-24">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16">
+        <div className={`flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16 reveal${sectionVisible ? ' visible' : ''}`}>
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3.5 py-1.5 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
@@ -93,7 +98,15 @@ export function NutritionSection({ onWaitlist }: Props) {
                     </div>
                   </div>
                   <div className="h-2 rounded-full overflow-hidden" style={{ background: m.track }}>
-                    <div className="h-full rounded-full" style={{ width: `${m.pct * 1.7}%`, background: m.color }} />
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: sectionVisible ? `${m.pct * 1.7}%` : '0%',
+                        background: m.color,
+                        transition: sectionVisible ? 'width 1s cubic-bezier(0.22,1,0.36,1)' : 'none',
+                        transitionDelay: sectionVisible ? '0.3s' : '0s',
+                      }}
+                    />
                   </div>
                 </div>
               ))}
@@ -101,9 +114,9 @@ export function NutritionSection({ onWaitlist }: Props) {
           </div>
 
           {/* Right: how it works */}
-          <div className="space-y-8">
-            {HOW_IT_WORKS.map((s) => (
-              <div key={s.step} className="flex gap-5">
+          <div ref={stepsRef} className="space-y-8">
+            {HOW_IT_WORKS.map((s, i) => (
+              <div key={s.step} className={`flex gap-5 reveal stagger-${i + 1}${stepsVisible ? ' visible' : ''}`}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: s.color + '15', border: `1px solid ${s.color}30` }}>
                   <span className="text-[12px] font-bold" style={{ color: s.color }}>{s.step}</span>
                 </div>

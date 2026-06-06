@@ -1,8 +1,11 @@
+import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useCountUp } from '../hooks/useCountUp'
+
 const STATS = [
-  { value: '10,000+', label: 'Waitlist spots',   color: '#059669' },
-  { value: '2.4M',    label: 'Meals to log',     color: '#3B82F6' },
-  { value: '4.9 ★',  label: 'Target rating',    color: '#F59E0B' },
-  { value: '14 days', label: 'Avg. streak goal', color: '#EC4899' },
+  { countTo: 10000, suffix: '+', label: 'Waitlist spots',   color: '#059669' },
+  { countTo: 2400,  suffix: 'K', label: 'Meals to log',     color: '#3B82F6' },
+  { countTo: 49,    suffix: ' ★', label: 'Target rating',   color: '#F59E0B', decimal: true },
+  { countTo: 14,    suffix: ' days', label: 'Avg. streak goal', color: '#EC4899' },
 ]
 
 const TESTIMONIALS = [
@@ -29,9 +32,32 @@ const CHALLENGES = [
   { emoji: '💧', title: 'Hydration Challenge',  participants: 562,  label: 'Coming soon' },
 ]
 
+function StatCard({ countTo, suffix, label, color, decimal, active }: {
+  countTo: number; suffix: string; label: string; color: string; decimal?: boolean; active: boolean
+}) {
+  const raw = useCountUp(countTo, 1600, active)
+  const formatted = decimal
+    ? (raw / 10).toFixed(1)
+    : countTo >= 1000
+      ? raw.toLocaleString()
+      : raw.toString()
+  return (
+    <div className="rounded-2xl border border-slate-100 p-6 text-center" style={{ background: '#FAFAFA' }}>
+      <p className="text-[32px] sm:text-[38px] font-semibold leading-none mb-2" style={{ color, fontFamily: 'var(--font-heading)' }}>
+        {formatted}{suffix}
+      </p>
+      <p className="text-[13px] text-slate-500">{label}</p>
+    </div>
+  )
+}
+
 interface Props { onWaitlist: () => void }
 
 export function CommunitySection({ onWaitlist }: Props) {
+  const [headerRef, headerVisible] = useScrollReveal<HTMLDivElement>()
+  const [statsRef, statsVisible] = useScrollReveal<HTMLDivElement>()
+  const [testimonialsRef, testimonialsVisible] = useScrollReveal<HTMLDivElement>()
+
   return (
     <section id="community" className="relative bg-white" style={{ zIndex: 2 }}>
       <div className="w-full overflow-hidden leading-none" aria-hidden="true">
@@ -42,7 +68,7 @@ export function CommunitySection({ onWaitlist }: Props) {
 
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pb-24">
         {/* Header */}
-        <div className="mb-14">
+        <div ref={headerRef} className={`mb-14 reveal${headerVisible ? ' visible' : ''}`}>
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             <span className="text-[13px] text-primary font-medium">The community</span>
@@ -56,19 +82,16 @@ export function CommunitySection({ onWaitlist }: Props) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+        <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
           {STATS.map((s) => (
-            <div key={s.label} className="rounded-2xl border border-slate-100 p-6 text-center" style={{ background: '#FAFAFA' }}>
-              <p className="text-[32px] sm:text-[38px] font-semibold leading-none mb-2" style={{ color: s.color, fontFamily: 'var(--font-heading)' }}>{s.value}</p>
-              <p className="text-[13px] text-slate-500">{s.label}</p>
-            </div>
+            <StatCard key={s.label} {...s} active={statsVisible} />
           ))}
         </div>
 
         {/* Testimonials */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="rounded-2xl border border-slate-100 p-7" style={{ background: '#FAFAFA' }}>
+        <div ref={testimonialsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          {TESTIMONIALS.map((t, i) => (
+            <div key={t.name} className={`rounded-2xl border border-slate-100 p-7 reveal stagger-${i + 1}${testimonialsVisible ? ' visible' : ''}`} style={{ background: '#FAFAFA' }}>
               <div className="flex gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="#F59E0B" aria-hidden="true">
@@ -110,7 +133,7 @@ export function CommunitySection({ onWaitlist }: Props) {
                 <span className="text-[28px] block mb-3">{c.emoji}</span>
                 <p className="text-[15px] font-semibold text-fore mb-1">{c.title}</p>
                 <p className="text-[12px] text-slate-400">{c.participants.toLocaleString()} people interested</p>
-                <span className="inline-block mt-3 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-primary">{c.label}</span>
+                <span className="inline-block mt-3 text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ background: '#F1F5F9', color: '#64748B' }}>{c.label}</span>
               </div>
             ))}
           </div>

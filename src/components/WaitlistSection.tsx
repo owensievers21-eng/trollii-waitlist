@@ -1,19 +1,21 @@
 import { useForm, ValidationError } from '@formspree/react'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 interface Props { onWaitlist: () => void }
 
 export function WaitlistSection({ onWaitlist }: Props) {
   const [state, handleSubmit] = useForm('xojzvnjp')
+  const [ref, visible] = useScrollReveal<HTMLElement>()
 
   return (
-    <section id="waitlist" className="relative bg-white" style={{ zIndex: 2 }}>
+    <section ref={ref} id="waitlist" className="relative bg-white" style={{ zIndex: 2 }}>
       <div className="w-full overflow-hidden leading-none" aria-hidden="true">
         <svg viewBox="0 0 1440 64" fill="none" className="w-full">
           <path d="M0 64 C360 0 1080 0 1440 64 L1440 0 L0 0 Z" fill="#ECFDF5" />
         </svg>
       </div>
 
-      <div className="max-w-2xl mx-auto px-5 sm:px-8 py-20 text-center">
+      <div className={`max-w-2xl mx-auto px-5 sm:px-8 py-20 text-center reveal${visible ? ' visible' : ''}`}>
         {/* Badge */}
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse relative pulse-ring" aria-hidden="true" />

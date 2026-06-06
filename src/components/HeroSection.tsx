@@ -188,15 +188,29 @@ export function HeroSection({ cardRef, textRef, onWaitlist }: Props) {
     >
       <div ref={textRef} className="max-w-xl relative z-10 flex-shrink-0">
         {/* AMI badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3.5 py-1.5 mb-5 sm:mb-6">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3.5 py-1.5 mb-4 sm:mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
           <span className="text-[13px] sm:text-[14px] text-primary font-medium">Powered by A.M.I. · Adaptive Macro Intelligence</span>
         </div>
 
-        {/* Typewriter */}
-        <p className="text-fore mb-5 sm:mb-6" style={{ fontSize: 'clamp(18px, 4vw, 26px)', lineHeight: 1.35, fontWeight: 400, minHeight: '54px' }}>
+        {/* H1 headline */}
+        <h1
+          className="text-fore leading-[1.1] mb-4"
+          style={{
+            fontFamily: 'var(--font-heading)',
+            fontSize: 'clamp(36px, 5.5vw, 64px)',
+            fontWeight: 600,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          Track every macro.<br />
+          <span style={{ color: 'var(--color-primary)' }}>Hit every goal.</span>
+        </h1>
+
+        {/* Typewriter subtitle */}
+        <p className="text-slate-500 mb-5 sm:mb-6" style={{ fontSize: 'clamp(15px, 2vw, 18px)', lineHeight: 1.6, fontWeight: 400, minHeight: '48px', maxWidth: '460px' }}>
           {displayed}
-          {!done && <span className="cursor-blink inline-block bg-fore align-middle" style={{ width: '2px', height: '1.1em', marginLeft: '2px', verticalAlign: 'middle' }} aria-hidden="true" />}
+          {!done && <span className="cursor-blink inline-block bg-slate-400 align-middle" style={{ width: '2px', height: '1em', marginLeft: '2px', verticalAlign: 'middle' }} aria-hidden="true" />}
         </p>
 
         {/* Pills */}

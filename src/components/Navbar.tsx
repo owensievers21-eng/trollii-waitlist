@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const NAV_LINKS = ['Features', 'Nutrition', 'Community', 'Plans'] as const
 
@@ -8,10 +8,20 @@ interface Props {
 
 export function Navbar({ onWaitlist }: Props) {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <>
-      <nav style={{ zIndex: 10 }} className="fixed top-0 left-0 right-0 flex items-center justify-between px-5 sm:px-8 py-4 sm:py-5">
+      <nav
+        style={{ zIndex: 10, transition: 'background 0.3s ease, box-shadow 0.3s ease' }}
+        className={`fixed top-0 left-0 right-0 flex items-center justify-between px-5 sm:px-8 py-4 sm:py-5${scrolled ? ' nav-scrolled' : ''}`}
+      >
         {/* Logo */}
         <div className="flex items-center gap-2.5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -24,11 +34,11 @@ export function Navbar({ onWaitlist }: Props) {
         </div>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center text-[21px] text-fore">
+        <div className="hidden md:flex items-center text-[15px] text-fore gap-1">
           {NAV_LINKS.map((link, i) => (
-            <span key={link}>
-              <a href={`#${link.toLowerCase()}`} className="hover:opacity-60 transition-opacity duration-200 cursor-pointer">{link}</a>
-              {i < NAV_LINKS.length - 1 && <span className="opacity-30 mx-1 select-none">,</span>}
+            <span key={link} className="flex items-center">
+              <a href={`#${link.toLowerCase()}`} className="px-3 py-1 rounded-md hover:bg-black/5 transition-colors duration-150 cursor-pointer">{link}</a>
+              {i < NAV_LINKS.length - 1 && <span className="opacity-20 select-none text-[11px]">·</span>}
             </span>
           ))}
         </div>

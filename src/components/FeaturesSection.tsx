@@ -73,9 +73,14 @@ const FEATURES = [
   },
 ]
 
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
 interface Props { onWaitlist: () => void }
 
 export function FeaturesSection({ onWaitlist }: Props) {
+  const [headerRef, headerVisible] = useScrollReveal<HTMLDivElement>()
+  const [gridRef, gridVisible] = useScrollReveal<HTMLDivElement>()
+
   return (
     <section id="features" className="relative bg-white" style={{ zIndex: 2 }}>
       <div className="w-full overflow-hidden leading-none" aria-hidden="true">
@@ -85,7 +90,7 @@ export function FeaturesSection({ onWaitlist }: Props) {
       </div>
 
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pt-4 pb-24">
-        <div className="mb-16">
+        <div ref={headerRef} className={`mb-16 reveal${headerVisible ? ' visible' : ''}`}>
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             <span className="text-[13px] text-primary font-medium">What Trollii does</span>
@@ -98,11 +103,11 @@ export function FeaturesSection({ onWaitlist }: Props) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURES.map((f) => (
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {FEATURES.map((f, i) => (
             <div
               key={f.label}
-              className="feature-card group rounded-2xl border border-slate-100 p-7 hover:border-transparent cursor-default"
+              className={`feature-card group rounded-2xl border border-slate-100 p-7 hover:border-transparent cursor-default reveal stagger-${Math.min(i + 1, 6)}${gridVisible ? ' visible' : ''}`}
               style={{ background: '#FAFAFA' }}
               onMouseEnter={(e) => { const el = e.currentTarget as HTMLDivElement; el.style.background = f.bg; el.style.boxShadow = `0 12px 40px ${f.color}20` }}
               onMouseLeave={(e) => { const el = e.currentTarget as HTMLDivElement; el.style.background = '#FAFAFA'; el.style.boxShadow = '' }}
