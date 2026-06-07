@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerContainer } from '../lib/variants'
 
 const PLANS = [
   {
@@ -74,8 +75,6 @@ interface Props {
 
 export function PlansSection({ onSignUp }: Props) {
   const [annual, setAnnual] = useState(false)
-  const [headerRef, headerVisible] = useScrollReveal<HTMLDivElement>()
-  const [cardsRef, cardsVisible] = useScrollReveal<HTMLDivElement>()
 
   return (
     <section id="plans" className="relative bg-surface" style={{ zIndex: 2 }}>
@@ -89,7 +88,13 @@ export function PlansSection({ onSignUp }: Props) {
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pb-24">
 
         {/* Header */}
-        <div ref={headerRef} className={`text-center mb-12 reveal${headerVisible ? ' visible' : ''}`}>
+        <motion.div
+          className="text-center mb-12"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3.5 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             <span className="text-[13px] text-primary font-medium">Pricing</span>
@@ -123,14 +128,21 @@ export function PlansSection({ onSignUp }: Props) {
               </span>
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Plan cards */}
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          {PLANS.map((plan, i) => (
-            <div
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
+          {PLANS.map((plan) => (
+            <motion.div
               key={plan.name}
-              className={`rounded-2xl border p-7 relative reveal stagger-${i + 1}${cardsVisible ? ' visible' : ''}`}
+              variants={fadeUp}
+              className="rounded-2xl border p-7 relative"
               style={{
                 background: plan.popular ? plan.color : '#FFFFFF',
                 borderColor: plan.popular ? plan.color : '#E2E8F0',
@@ -214,9 +226,9 @@ export function PlansSection({ onSignUp }: Props) {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Fine print */}
         <p className="text-center text-[13px] text-slate-400 mt-10">
