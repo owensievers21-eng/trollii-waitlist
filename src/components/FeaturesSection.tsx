@@ -1,3 +1,7 @@
+import { motion } from 'framer-motion'
+import { fadeUp, staggerContainer } from '../lib/variants'
+import { FeatureCard } from './FeatureCard'
+
 const FEATURES = [
   {
     icon: (
@@ -94,12 +98,7 @@ const FEATURES = [
   },
 ]
 
-import { useScrollReveal } from '../hooks/useScrollReveal'
-
 export function FeaturesSection() {
-  const [headerRef, headerVisible] = useScrollReveal<HTMLDivElement>()
-  const [gridRef, gridVisible] = useScrollReveal<HTMLDivElement>()
-
   return (
     <section
       id="features"
@@ -115,7 +114,13 @@ export function FeaturesSection() {
 
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pt-4 pb-24">
         {/* Section header */}
-        <div ref={headerRef} className={`mb-16 reveal${headerVisible ? ' visible' : ''}`}>
+        <motion.div
+          className="mb-16"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             <span className="text-[13px] text-primary font-medium">What Trollii does</span>
@@ -131,57 +136,20 @@ export function FeaturesSection() {
           <p className="text-[17px] text-slate-500 max-w-xl leading-relaxed">
             No gimmicks, no complicated plans. Just clean tracking, smart AI, and the data to understand what's actually happening in your body.
           </p>
-        </div>
+        </motion.div>
 
         {/* Feature grid */}
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURES.map((f, i) => (
-            <div
-              key={f.label}
-              className={`feature-card group rounded-2xl border border-slate-100 p-7 hover:border-transparent cursor-default reveal stagger-${Math.min(i + 1, 6)}${gridVisible ? ' visible' : ''}`}
-              style={{ background: '#FAFAFA' }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLDivElement
-                el.style.background = f.bg
-                el.style.boxShadow = `0 12px 40px ${f.color}20`
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLDivElement
-                el.style.background = '#FAFAFA'
-                el.style.boxShadow = ''
-              }}
-            >
-              {/* Icon container */}
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                style={{ background: f.bg, border: `1px solid ${f.color}22` }}
-              >
-                {f.icon}
-              </div>
-
-              {/* Label chip */}
-              <p
-                className="text-[11px] font-semibold tracking-widest uppercase mb-2"
-                style={{ color: f.color }}
-              >
-                {f.label}
-              </p>
-
-              {/* Title */}
-              <h3
-                className="text-[20px] font-semibold text-fore mb-3 leading-snug"
-                style={{ fontFamily: 'var(--font-heading)' }}
-              >
-                {f.title}
-              </h3>
-
-              {/* Body */}
-              <p className="text-[14px] text-slate-500 leading-relaxed">
-                {f.body}
-              </p>
-            </div>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
+          {FEATURES.map((f) => (
+            <FeatureCard key={f.label} {...f} />
           ))}
-        </div>
+        </motion.div>
 
         {/* Bottom CTA */}
         <div className="mt-16 flex flex-col sm:flex-row items-start sm:items-center gap-4">
