@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
+import { fadeUp } from '../lib/variants'
 import { supabase } from '../lib/supabase'
 
 const SOCIAL_PROOF = [
@@ -11,7 +12,6 @@ const SOCIAL_PROOF = [
 export function WaitlistCTA() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
-  const [ref, visible] = useScrollReveal<HTMLElement>()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,7 +28,6 @@ export function WaitlistCTA() {
 
   return (
     <section
-      ref={ref}
       className="relative bg-white"
       style={{ zIndex: 2 }}
     >
@@ -40,7 +39,12 @@ export function WaitlistCTA() {
       </div>
 
       <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center pb-24 pt-4">
-        <div className={`reveal${visible ? ' visible' : ''}`}>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
           {/* Pill */}
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" aria-hidden="true" />
@@ -109,7 +113,7 @@ export function WaitlistCTA() {
           <p className="text-[12px] text-slate-400 mt-5">
             Your data is private, encrypted, and never sold.
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
