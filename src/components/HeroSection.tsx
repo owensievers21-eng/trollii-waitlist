@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
+import { motion } from 'framer-motion'
+import { fadeUp, staggerContainer } from '../lib/variants'
 import { useTypewriter } from '../hooks/useTypewriter'
 
 interface Props {
@@ -203,13 +205,7 @@ function CopyIcon() {
 
 export function HeroSection({ cardRef, textRef, onSignIn }: Props) {
   const { displayed, done } = useTypewriter({ text: TYPEWRITER_TEXT, speed: 36, startDelay: 600 })
-  const [pillsVisible, setPillsVisible] = useState(false)
   const [emailCopied, setEmailCopied] = useState(false)
-
-  useEffect(() => {
-    const t = setTimeout(() => setPillsVisible(true), 400)
-    return () => clearTimeout(t)
-  }, [])
 
   const copyEmail = async () => {
     try {
@@ -233,18 +229,24 @@ export function HeroSection({ cardRef, textRef, onSignIn }: Props) {
       style={{ zIndex: 1 }}
     >
       {/* Left: text — invisible collision zone, canvas particles bounce off this rect */}
-      <div ref={textRef} className="max-w-xl relative z-10 flex-shrink-0">
-
+      <motion.div
+        ref={textRef}
+        className="max-w-xl relative z-10 flex-shrink-0"
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+      >
         {/* AMI badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3.5 py-1.5 mb-4 sm:mb-5">
+        <motion.div variants={fadeUp} className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-3.5 py-1.5 mb-4 sm:mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
           <span className="text-[13px] sm:text-[14px] text-primary font-medium">
             Powered by A.M.I. · Adaptive Macro Intelligence
           </span>
-        </div>
+        </motion.div>
 
         {/* H1 headline */}
-        <h1
+        <motion.h1
+          variants={fadeUp}
           className="text-fore leading-[1.1] mb-4"
           style={{
             fontFamily: 'var(--font-heading)',
@@ -255,10 +257,11 @@ export function HeroSection({ cardRef, textRef, onSignIn }: Props) {
         >
           Track every macro.<br />
           <span style={{ color: 'var(--color-primary)' }}>Hit every goal.</span>
-        </h1>
+        </motion.h1>
 
         {/* Typewriter subtitle */}
-        <p
+        <motion.p
+          variants={fadeUp}
           className="text-slate-500 mb-5 sm:mb-6"
           style={{ fontSize: 'clamp(15px, 2vw, 18px)', lineHeight: 1.6, fontWeight: 400, minHeight: '48px', maxWidth: '460px' }}
         >
@@ -270,44 +273,21 @@ export function HeroSection({ cardRef, textRef, onSignIn }: Props) {
               aria-hidden="true"
             />
           )}
-        </p>
+        </motion.p>
 
         {/* Pills */}
-        <div
-          className="flex flex-wrap gap-y-1"
-          style={{
-            opacity: pillsVisible ? 1 : 0,
-            transform: pillsVisible ? 'translateY(0)' : 'translateY(8px)',
-            transition: 'opacity 0.4s ease, transform 0.4s ease',
-          }}
-        >
+        <motion.div variants={fadeUp} className="flex flex-wrap gap-y-1">
           {WHITE_PILLS.map((label) => (
             <button
               key={label}
-              className="
-                inline-flex items-center justify-center
-                bg-white/90 backdrop-blur-sm text-fore
-                border border-black/10 rounded-full
-                text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em]
-                mx-[0.2em] mb-[0.4em] whitespace-nowrap cursor-pointer
-                hover:bg-primary hover:text-white hover:border-primary
-                transition-colors duration-200
-              "
+              className="inline-flex items-center justify-center bg-white/90 backdrop-blur-sm text-fore border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-colors duration-200"
             >
               {label}
             </button>
           ))}
-
           <button
             onClick={copyEmail}
-            className="
-              inline-flex items-center justify-center gap-2 sm:gap-3
-              text-white bg-primary border border-primary rounded-full
-              text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em]
-              mx-[0.2em] mb-[0.4em] whitespace-nowrap cursor-pointer
-              hover:bg-white hover:text-primary
-              transition-colors duration-200
-            "
+            className="inline-flex items-center justify-center gap-2 sm:gap-3 text-white bg-primary border border-primary rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap cursor-pointer hover:bg-white hover:text-primary transition-colors duration-200"
             aria-label="Copy email hello@trollii.app"
           >
             {emailCopied ? <span>✓ Copied!</span> : (
@@ -317,11 +297,17 @@ export function HeroSection({ cardRef, textRef, onSignIn }: Props) {
               </>
             )}
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Right: nutrition card */}
-      <NutritionCard cardRef={cardRef} onSignIn={onSignIn} />
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <NutritionCard cardRef={cardRef} onSignIn={onSignIn} />
+      </motion.div>
     </section>
   )
 }
