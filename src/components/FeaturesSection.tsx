@@ -77,6 +77,22 @@ const FEATURES = [
     color: '#EA580C',
     bg: '#FFF7ED',
   },
+  {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <ellipse cx="12" cy="14" rx="4" ry="3" stroke="#F43F5E" strokeWidth="1.8" />
+        <ellipse cx="7" cy="11" rx="1.5" ry="2" stroke="#F43F5E" strokeWidth="1.5" />
+        <ellipse cx="10" cy="9" rx="1.5" ry="2" stroke="#F43F5E" strokeWidth="1.5" />
+        <ellipse cx="14" cy="9" rx="1.5" ry="2" stroke="#F43F5E" strokeWidth="1.5" />
+        <ellipse cx="17" cy="11" rx="1.5" ry="2" stroke="#F43F5E" strokeWidth="1.5" />
+      </svg>
+    ),
+    label: 'A.M.I. Pet System',
+    title: 'Eat well. Level up your pet.',
+    body: 'Every macro you log earns your pet XP. Hatch eggs, raise one of four creatures, and battle friends — nutrition tracking that actually feels like a game.',
+    color: '#F43F5E',
+    bg: '#FFF1F2',
+  },
 ]
 
 import { useScrollReveal } from '../hooks/useScrollReveal'
