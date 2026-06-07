@@ -1,5 +1,6 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
-import { useCountUp } from '../hooks/useCountUp'
+import { motion, useInView, animate } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { fadeUp, staggerContainer } from '../lib/variants'
 
 const STATS = [
   { display: '2,400+', countTo: 2400, suffix: '+', label: 'Waitlist members', color: '#059669' },
@@ -44,30 +45,49 @@ const CHALLENGES = [
   { emoji: '💧', title: 'Hydration Challenge', participants: 24, label: 'Coming soon' },
 ]
 
-function StatCard({ countTo, suffix, label, color, decimal, active }: {
-  countTo: number; suffix: string; label: string; color: string; decimal?: boolean; active: boolean
+function StatCard({ countTo, suffix, label, color, decimal }: {
+  countTo: number; suffix: string; label: string; color: string; decimal?: boolean
 }) {
-  const raw = useCountUp(countTo, 1600, active)
+  const [value, setValue] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true })
+
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(0, countTo, {
+      duration: 2,
+      ease: 'easeOut',
+      onUpdate: (v) =>
+        setValue(decimal ? parseFloat((v / 10).toFixed(1)) : Math.round(v)),
+    })
+    return controls.stop
+  }, [inView, countTo, decimal])
+
   const formatted = decimal
-    ? (raw / 10).toFixed(1)
+    ? value.toFixed(1)
     : countTo >= 1000
-      ? raw.toLocaleString()
-      : raw.toString()
+      ? value.toLocaleString()
+      : value.toString()
+
   return (
-    <div className="rounded-2xl border border-slate-100 p-6 text-center" style={{ background: '#FAFAFA' }}>
-      <p className="text-[32px] sm:text-[38px] font-semibold leading-none mb-2" style={{ color, fontFamily: 'var(--font-heading)' }}>
+    <motion.div
+      ref={ref}
+      variants={fadeUp}
+      className="rounded-2xl border border-slate-100 p-6 text-center"
+      style={{ background: '#FAFAFA' }}
+    >
+      <p
+        className="text-[32px] sm:text-[38px] font-semibold leading-none mb-2"
+        style={{ color, fontFamily: 'var(--font-heading)' }}
+      >
         {formatted}{suffix}
       </p>
       <p className="text-[13px] text-slate-500">{label}</p>
-    </div>
+    </motion.div>
   )
 }
 
 export function CommunitySection() {
-  const [statsRef, statsVisible] = useScrollReveal<HTMLDivElement>()
-  const [headerRef, headerVisible] = useScrollReveal<HTMLDivElement>()
-  const [testimonialsRef, testimonialsVisible] = useScrollReveal<HTMLDivElement>()
-
   return (
     <section id="community" className="relative bg-white" style={{ zIndex: 2 }}>
       {/* Wave top */}
@@ -80,7 +100,13 @@ export function CommunitySection() {
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pb-24">
 
         {/* Header */}
-        <div ref={headerRef} className={`mb-14 reveal${headerVisible ? ' visible' : ''}`}>
+        <motion.div
+          className="mb-14"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
             <span className="text-[13px] text-primary font-medium">The community</span>
@@ -96,21 +122,41 @@ export function CommunitySection() {
           <p className="text-[17px] text-slate-500 max-w-lg leading-relaxed">
             Join thousands of people who track, share, and keep each other on track — without the toxic diet culture.
           </p>
-        </div>
+        </motion.div>
 
         {/* Stats strip */}
-        <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+        <motion.div
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
           {STATS.map((s) => (
-            <StatCard key={s.label} {...s} active={statsVisible} />
+            <StatCard
+              key={s.label}
+              countTo={s.countTo}
+              suffix={s.suffix}
+              label={s.label}
+              color={s.color}
+              decimal={s.decimal}
+            />
           ))}
-        </div>
+        </motion.div>
 
         {/* Testimonials */}
-        <div ref={testimonialsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          {TESTIMONIALS.map((t, i) => (
-            <div
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
+          {TESTIMONIALS.map((t) => (
+            <motion.div
               key={t.name}
-              className={`rounded-2xl border border-slate-100 p-7 reveal stagger-${i + 1}${testimonialsVisible ? ' visible' : ''}`}
+              variants={fadeUp}
+              className="rounded-2xl border border-slate-100 p-7"
               style={{ background: '#FAFAFA' }}
             >
               {/* Stars */}
@@ -147,9 +193,9 @@ export function CommunitySection() {
                   <span className="text-[12px] font-semibold text-slate-500">{t.streak}d</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Active challenges */}
         <div
