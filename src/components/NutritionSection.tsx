@@ -1,3 +1,7 @@
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
+import { fadeUp, staggerContainer } from '../lib/variants'
+
 const MACRO_BREAKDOWN = [
   { label: 'Protein', grams: 68, pct: 28, color: '#3B82F6', bg: '#EFF6FF', track: '#DBEAFE', desc: 'Builds muscle, keeps you full' },
   { label: 'Carbs',   grams: 142, pct: 58, color: '#F59E0B', bg: '#FFFBEB', track: '#FEF3C7', desc: 'Primary energy source' },
@@ -67,14 +71,25 @@ function MacroDonut() {
   )
 }
 
-import { useScrollReveal } from '../hooks/useScrollReveal'
+function MacroBar({ pct, color, track }: { pct: number; color: string; track: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  return (
+    <div ref={ref} className="h-2 rounded-full overflow-hidden" style={{ background: track }}>
+      <motion.div
+        className="h-full rounded-full"
+        style={{ background: color }}
+        initial={{ width: 0 }}
+        animate={{ width: inView ? `${pct * 1.7}%` : 0 }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+      />
+    </div>
+  )
+}
 
 export function NutritionSection() {
-  const [sectionRef, sectionVisible] = useScrollReveal<HTMLElement>()
-  const [stepsRef, stepsVisible] = useScrollReveal<HTMLDivElement>()
-
   return (
-    <section ref={sectionRef} id="nutrition" className="relative bg-surface" style={{ zIndex: 2 }}>
+    <section id="nutrition" className="relative bg-surface" style={{ zIndex: 2 }}>
       {/* Wave top */}
       <div className="w-full overflow-hidden leading-none" aria-hidden="true">
         <svg viewBox="0 0 1440 64" fill="none" className="w-full">
@@ -85,7 +100,13 @@ export function NutritionSection() {
       <div className="max-w-6xl mx-auto px-5 sm:px-8 md:px-10 lg:px-14 pb-24">
 
         {/* Header */}
-        <div className={`flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16 reveal${sectionVisible ? ' visible' : ''}`}>
+        <motion.div
+          className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-16"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+        >
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3.5 py-1.5 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
@@ -103,7 +124,7 @@ export function NutritionSection() {
           <p className="text-[16px] text-slate-500 max-w-sm leading-relaxed lg:text-right">
             Trollii doesn't just count calories. It breaks every meal into the macronutrients that actually drive your results.
           </p>
-        </div>
+        </motion.div>
 
         {/* Main content: two columns */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
@@ -136,26 +157,22 @@ export function NutritionSection() {
                       <span className="text-[12px]" style={{ color: m.color, opacity: 0.5 }}>{m.pct}%</span>
                     </div>
                   </div>
-                  <div className="h-2 rounded-full overflow-hidden" style={{ background: m.track }}>
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: sectionVisible ? `${m.pct * 1.7}%` : '0%',
-                        background: m.color,
-                        transition: sectionVisible ? 'width 1s cubic-bezier(0.22,1,0.36,1)' : 'none',
-                        transitionDelay: sectionVisible ? '0.3s' : '0s',
-                      }}
-                    />
-                  </div>
+                  <MacroBar pct={m.pct} color={m.color} track={m.track} />
                 </div>
               ))}
             </div>
           </div>
 
           {/* Right: how it works steps */}
-          <div ref={stepsRef} className="space-y-8">
-            {HOW_IT_WORKS.map((s, i) => (
-              <div key={s.step} className={`flex gap-5 reveal stagger-${i + 1}${stepsVisible ? ' visible' : ''}`}>
+          <motion.div
+            className="space-y-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+          >
+            {HOW_IT_WORKS.map((s) => (
+              <motion.div key={s.step} variants={fadeUp} className="flex gap-5">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
                   style={{ background: s.color + '15', border: `1px solid ${s.color}30` }}
@@ -171,7 +188,7 @@ export function NutritionSection() {
                   </h3>
                   <p className="text-[15px] text-slate-500 leading-relaxed">{s.body}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
 
             <div className="pt-2">
@@ -185,7 +202,7 @@ export function NutritionSection() {
                 </svg>
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Micronutrient chips */}
