@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import type { User } from '@supabase/supabase-js'
+import { MotionConfig } from 'framer-motion'
 import { supabase } from './lib/supabase'
 import { HeroCanvas } from './components/HeroCanvas'
 import { Navbar } from './components/Navbar'
@@ -46,21 +47,23 @@ export default function App() {
   }
 
   return (
-    <div className="relative overflow-x-hidden">
-      <HeroCanvas cardRef={cardRef} textRef={textRef} />
-      <Navbar onSignIn={openSignIn} user={user} onSignOut={handleSignOut} />
-      <HeroSection cardRef={cardRef} textRef={textRef} onSignIn={openSignUp} />
-      <FeaturesSection />
-      <NutritionSection />
-      <CommunitySection />
-      <PlansSection onSignUp={openSignUp} />
-      <WaitlistCTA />
-      <Footer />
-      <SignInModal
-        open={signInOpen}
-        onClose={() => setSignInOpen(false)}
-        initialMode={signInMode}
-      />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="relative overflow-x-hidden">
+        <HeroCanvas cardRef={cardRef} textRef={textRef} />
+        <Navbar onSignIn={openSignIn} user={user} onSignOut={handleSignOut} />
+        <HeroSection cardRef={cardRef} textRef={textRef} onSignIn={openSignUp} />
+        <FeaturesSection />
+        <NutritionSection />
+        <CommunitySection />
+        <PlansSection onSignUp={openSignUp} />
+        <WaitlistCTA />
+        <Footer />
+        <SignInModal
+          open={signInOpen}
+          onClose={() => setSignInOpen(false)}
+          initialMode={signInMode}
+        />
+      </div>
+    </MotionConfig>
   )
 }
