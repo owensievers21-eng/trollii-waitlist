@@ -1,8 +1,34 @@
-const LINKS = {
-  Product: ['Features', 'Nutrition', 'Meal Planning', 'AI Scanning', 'Progress Reports'],
-  Company:  ['About', 'Blog', 'Careers', 'Press', 'Privacy Policy'],
-  Community:['Challenges', 'Leaderboard', 'Refer a Friend', 'Discord', 'Instagram'],
-  Support:  ['Help Centre', 'Contact Us', 'App Status', 'Terms of Use', 'Cookie Settings'],
+import { Link } from 'react-router-dom'
+
+const LINKS: Record<string, { label: string; href: string }[]> = {
+  Product: [
+    { label: 'Features', href: '#' },
+    { label: 'Nutrition', href: '#' },
+    { label: 'Meal Planning', href: '#' },
+    { label: 'AI Scanning', href: '#' },
+    { label: 'Progress Reports', href: '#' },
+  ],
+  Company: [
+    { label: 'About', href: '#' },
+    { label: 'Blog', href: '#' },
+    { label: 'Careers', href: '#' },
+    { label: 'Press', href: '#' },
+    { label: 'Privacy Policy', href: '/privacy' },
+  ],
+  Community: [
+    { label: 'Challenges', href: '#' },
+    { label: 'Leaderboard', href: '#' },
+    { label: 'Refer a Friend', href: '#' },
+    { label: 'Discord', href: '#' },
+    { label: 'Instagram', href: '#' },
+  ],
+  Support: [
+    { label: 'Help Centre', href: '#' },
+    { label: 'Contact Us', href: '#' },
+    { label: 'App Status', href: '#' },
+    { label: 'Terms of Use', href: '#' },
+    { label: 'Cookie Settings', href: '#' },
+  ],
 }
 
 export function Footer() {
@@ -61,14 +87,23 @@ export function Footer() {
             <div key={heading}>
               <p className="text-[11px] font-bold text-white/40 uppercase tracking-widest mb-4">{heading}</p>
               <ul className="space-y-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-[14px] text-slate-400 hover:text-white transition-colors duration-200 cursor-pointer"
-                    >
-                      {link}
-                    </a>
+                {links.map(({ label, href }) => (
+                  <li key={label}>
+                    {href.startsWith('/') ? (
+                      <Link
+                        to={href}
+                        className="text-[14px] text-slate-400 hover:text-white transition-colors duration-200"
+                      >
+                        {label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={href}
+                        className="text-[14px] text-slate-400 hover:text-white transition-colors duration-200 cursor-pointer"
+                      >
+                        {label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { User } from '@supabase/supabase-js'
 import { MotionConfig } from 'framer-motion'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 import { HeroCanvas } from './components/HeroCanvas'
 import { Navbar } from './components/Navbar'
@@ -12,8 +13,9 @@ import { PlansSection } from './components/PlansSection'
 import { WaitlistCTA } from './components/WaitlistCTA'
 import { Footer } from './components/Footer'
 import { SignInModal } from './components/SignInModal'
+import { PrivacyPolicy } from './pages/PrivacyPolicy'
 
-export default function App() {
+function LandingPage() {
   const [signInOpen, setSignInOpen] = useState(false)
   const [signInMode, setSignInMode] = useState<'signin' | 'signup' | 'magic'>('signin')
   const [user, setUser] = useState<User | null>(null)
@@ -65,5 +67,16 @@ export default function App() {
         />
       </div>
     </MotionConfig>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
