@@ -92,6 +92,8 @@ export function Footer() {
                     {href.startsWith('/') ? (
                       <Link
                         to={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-[14px] text-slate-400 hover:text-white transition-colors duration-200"
                       >
                         {label}
